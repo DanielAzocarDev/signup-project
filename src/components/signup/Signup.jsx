@@ -16,7 +16,7 @@ import {
   ModalCloseButton,
   Text,
 } from '@chakra-ui/react'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { FirebaseAuth } from '../../firebase/config'
 import { signInWithGoogle } from '../../firebase/provider'
 
@@ -57,9 +57,10 @@ export const Signup = () => {
       createUserWithEmailAndPassword(FirebaseAuth, formData.email, formData.password).then((userCredential) => {
         setIsLoading(false)
         const user = userCredential.user;
+
+        updateProfile(FirebaseAuth.currentUser, { displayName: `${formData.firstName} ${formData.lastName}` })
         setIsModalOpen(true)
         setModalMessage('Signup successfully!')
-        console.log(user, 'success')
       })
         .catch((error) => {
           setIsLoading(false)
